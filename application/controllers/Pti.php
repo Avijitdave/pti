@@ -17,6 +17,7 @@ class Pti extends CI_Controller {
 		$this->load->view('welcome_message');
 	}
 	
+	
 	public function pti_json(){
 	    $results = json_decode(file_get_contents("http://localhost:82/ptijson.json"),true);
 	    
@@ -43,5 +44,27 @@ class Pti extends CI_Controller {
 	    }
 	    
 	    $this->db->insert_batch('ibc_news_pti',$newsList);
+	}
+	
+	
+	function fetch($date=null,$cate=null,$city=null){
+	    if(is_null($date)){
+	        $this->db->where('date(published)',date('Y-m-d'));
+	    } else {
+	        $this->db->where('date(published)',$date);
+	    }
+	    
+	    if(!is_null($cate)){
+	        $this->db->where('categories',$cate);
+	    }
+	    
+	    if(!is_null($city)){
+	        $this->db->where('origin_hindi',$city);
+	    }
+	    
+	    $this->db->select('*');
+	    $this->db->order_by('published','desc');
+	    $data['feeds'] = $this->db->get_where('ibc_news_pti',array('status'=>1))->result_array();
+	    $this->load->view('pti_dashboard',$data);
 	}
 }
