@@ -6,10 +6,8 @@ class Pti extends CI_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->database();
-//         $db2 = $this->load->database('sqlsvr', TRUE);
-        
+        $this->load->model(array('Pti_model'));
         $this->load->library(['form_validation','session','email']);
-        //$this->load->model(array('Channel_model'));
         $this->load->helper(['url', 'language','download']);
     }
     
@@ -39,7 +37,13 @@ class Pti extends CI_Controller {
 	        $temp['updated'] = $result['updated'];
 	        $temp['categories'] = $result['categories'][0];
 	        $temp['sub_headline'] = $result['sub_headline'];
-	        $temp['status'] = 1;	        
+	        $temp['status'] = 1;	
+	        $Detail = $this->Pti_model->getIbcCategory($result['categories'][0],$result['origin']);
+	        
+	        if(count($result)>0){
+	           $temp['ibc_category'] = $result['ibc_category'];
+	           $temp['ibc_news_type'] = $result['ibc_news_type'];
+	        }
 	        $newsList[] = $temp;
 	    }
 	    
