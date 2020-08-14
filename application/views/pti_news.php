@@ -53,15 +53,16 @@
 				 <div class="col-sm-6"  >
                <select class="form-control select2" id="table-filter">
                   <option value="">All</option>
-				  <option value="छत्तीसगढ़">CG</option>
-				  <option value="मध्यप्रदेश">MP</option>
-				  <option value="उत्तर प्रदेश">UP</option>
-				  <option value="BR">BR</option>
-				  <option value="MH">MH</option>
-				  <option value="देश">National/Other</option>
-				  <option value="SPORT">Sports</option>
-				  <option value="दुनिया">International</option>
-				  <option value="ART">Business</option>		  
+				  <option>Chhattisgarh</option>
+				  <option>Madhya Pradesh</option>		
+				  <option>Maharashtra</option>
+				  <option>Bihar</option>
+				  <option>Uttar Pradesh</option>
+				  <option>National</option>
+				  <option>World</option>
+				  <option>Sport</option>
+				  <option>Business</option>				  
+
                 </select>
               </div>
 			 
@@ -69,7 +70,7 @@
 		</div>
 		<div class="col-md-6">
 			<div class="card-footer">
-                  <button type="button" class="btn btn-success">Publish News</button>
+                  <button type="button" class="btn btn-success">Publish News TO Website</button>
                 </div>
 		</div>
 			  
