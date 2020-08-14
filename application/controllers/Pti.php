@@ -11,7 +11,7 @@ class Pti extends CI_Controller {
         $this->load->helper(['url', 'language','download']);
     }
     
-	public function index(){
+	public function index(){   
 		$this->load->view('welcome_message');
 	}
 	

@@ -58,7 +58,7 @@
 				  <option>Maharashtra</option>
 				  <option>Bihar</option>
 				  <option>Uttar Pradesh</option>
-				  <option>National</option>
+				  <option value="Country">National</option>
 				  <option>World</option>
 				  <option>Sport</option>
 				  <option>Business</option>				  
@@ -70,7 +70,7 @@
 		</div>
 		<div class="col-md-6">
 			<div class="card-footer">
-                  <button type="button" class="btn btn-success">Publish News TO Website</button>
+                  <button type="button" class="btn btn-success" id="feed_pub">Publish News TO Website</button>
                 </div>
 		</div>
 			  
@@ -94,6 +94,7 @@
                   <th>Tittle</th>
                   <th>Slug</th>
                   <th>content</th>
+                  <th>Dev Category</th>
                   <th>Category</th>
 				  <th>State</th>
 				  <th>City</th>
@@ -101,24 +102,26 @@
                 </thead>
                 <tbody>
                 <?php if(count($feeds)>0){
+                    $c = 1;
                     foreach($feeds as $feed){ ?>
                   		
                   		<tr>
         					<td>
             					<div class="icheck-danger d-inline">
-                                    <input type="checkbox" class="singlechkbox" id="checkboxdanger1" name="news[]" value="<?php echo $feed['guid']; ?>">
+                                    <input type="checkbox" class="singlechkbox" id="checkboxdanger_<?php echo $c;?>" data-id="<?php echo $c;?>" name="news" value="<?php echo $feed['guid']; ?>">
                                     <label for="checkboxdanger1"></label>
                                 </div>							
         					</td>	
         				  	<td><?php echo $feed['slug_hindi']; ?></td>
         				  	<td><?php echo $feed['slug_eng']; ?></td>
-        				  	<td><?php echo substr($feed['content'],0,200); ?></td>
-        				  	<td><?php echo $feed['category_name_hindi']; ?></td>
-        				  	<td><?php echo $feed['state']; ?></td>
-        				  	<td><?php echo $feed['city_name_hindi']; ?></td>
+        				  	<td><?php echo substr($feed['content'],0,300); ?></td>
+        				  	<td><?php echo $feed['categories']; ?></td>
+        				  	<td><?php echo $feed['category_name_english']; ?></td>
+        				  	<td><?php echo $feed['state_name_english']; ?></td>
+        				  	<td><?php echo $feed['city_name_english']; ?></td>
         				</tr>
                   		      
-                <?php }
+                <?php $c++; }
                 } ?>
                 </tbody>
               </table>
@@ -177,14 +180,25 @@
               $('.singlechkbox').prop('checked', this.checked);
         });
  
-        $('body').on('click', '.singlechkbox', function() {
+        $(document).on('click', '.singlechkbox', function() {
+            var id = $(this).data('id');
             if($(".singlechkbox").length == $(".singlechkbox:checked").length) {
-                $("#checkboxSuccess1").prop("checked", "checked");
+                $("#checkboxSuccess_"+id).prop("checked", "checked");
             } else {
-                $("#checkboxSuccess1").removeAttr("checked");
+                $("#checkboxSuccess_"+id).removeAttr("checked");
             }
  
         });
+
+		$(document).on('click','#feed_pub',function(){
+			
+
+			$("input:checkbox[name=news]:checked").each(function(){
+				console.log($(this).val());
+			    //yourArray.push($(this).val());
+			});
+			
+		});
     });
 </script>
 <script type="application/javascript">

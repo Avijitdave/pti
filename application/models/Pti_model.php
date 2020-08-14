@@ -88,10 +88,11 @@ class Pti_model extends CI_Model {
 	
 	
 	function news(){
-	    $this->db->select('inp.*,ic.category_name_hindi,ici.city_name_hindi');
+	    $this->db->select('inp.*,ic.category_name_english,ici.city_name_english,is.state_name_english');
 	    $this->db->order_by('inp.published','desc');
 	    $this->db->join('ibc_categories ic','ic.id = inp.ibc_category','left');
 	    $this->db->join('ibc_cities ici','ici.id = inp.city_id','left');
+	    $this->db->join('ibc_states is','is.id = inp.state_id','left');
 	    $data['feeds'] = $this->db->get_where('ibc_news_pti inp',array('date(inp.published)'=>'2020-08-07','inp.status'=>1))->result_array();
 	    return $data['feeds'];
 	}
