@@ -23,7 +23,9 @@ class Pti_news extends CI_Controller {
 	public function index()
 	{
 		//$data['badge_records'] = $this->login_model->get_badge_records();
-		$this->load->view('pti_news');
+		$this->load->model('Pti_model');
+		$data['feeds'] = $this->Pti_model->news();
+		$this->load->view('pti_news',$data);
 	}
 	/*public function add_badgedata($badge_id = NULL)
 	{

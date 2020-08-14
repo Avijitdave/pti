@@ -53,11 +53,16 @@
 				 <div class="col-sm-6"  >
                <select class="form-control select2" id="table-filter">
                   <option value="">All</option>
-				  <option>Tiger Nixon</option>		  
+				  <option value="छत्तीसगढ़">CG</option>
+				  <option value="मध्यप्रदेश">MP</option>
+				  <option value="उत्तर प्रदेश">UP</option>
+				  <option value="BR">BR</option>
+				  <option value="MH">MH</option>
+				  <option value="देश">National/Other</option>
+				  <option value="SPORT">Sports</option>
+				  <option value="दुनिया">International</option>
+				  <option value="ART">Business</option>		  
                 </select>
-				
-                 
-                
               </div>
 			 
 			  </div>
@@ -74,7 +79,6 @@
 			
             <!-- /.box-header -->
             <div class="box-body">
-			 
               <table id="example1" class="table table-bordered table-striped">
 			   <!--table id="example1" class="display" cellspacing="0" width="100%"-->
                 <thead>
@@ -85,110 +89,36 @@
                         <label for="checkboxSuccess1">
                         </label>
                       </div>
-				  
-				  
-				  
 				  </th>
                   <th>Tittle</th>
-                  <th>Remark</th>
-                  <th>Img</th>
-				  <th>CreatedBy</th>
-				  <th>Status</th>
-				  <th>Action</th>
+                  <th>Slug</th>
+                  <th>content</th>
+                  <th>Category</th>
+				  <th>State</th>
+				  <th>City</th>
                 </tr>
                 </thead>
                 <tbody>
-				
-							<tr>
-							
-							<td>
-							 <div class="icheck-danger d-inline">
-                        <input type="checkbox" class="singlechkbox" id="checkboxdanger1" name="news[]" value="1">
-                        <label for="checkboxdanger1">
-                        </label>
-                      </div>							
-							</td>
-							
-							
-				  <td>Tiger Nixon</td>
-				  <td>System Architect</td>
-				  <td>Edinburgh</td>
-				  <td>61</td>
-				  <td>2011/04/25</td>
-				  <td>$320,800</td>
-				</tr>
-				<tr>
-				
-				 <td> 
-   <div class="icheck-danger d-inline">
-                        <input type="checkbox" class="singlechkbox" id="checkboxdanger2" name="news[]" value="2">
-                        <label for="checkboxdanger2">
-                        </label>
-                      </div>
-  </td>
-				
-				  <td>Garrett Winters</td>
-				  <td>Accountant</td>
-				  <td>Tokyo</td>
-				  <td>63</td>
-				  <td>2011/07/25</td>
-				  <td>$170,750</td>
-				</tr>
-				<tr>
-				
-				 <td> 
-  <div class="icheck-danger d-inline">
-                        <input type="checkbox" class="singlechkbox" id="checkboxdanger3" name="news[]" value="3">
-                        <label for="checkboxSuccess3">
-                        </label>
-                      </div></td>
-				
-				  <td>Ashton Cox</td>
-				  <td>Junior Technical Author</td>
-				  <td>San Francisco</td>
-				  <td>66</td>
-				  <td>2009/01/12</td>
-				  <td>$86,000</td>
-				</tr>
-				<tr>
-				
-				 <td> 
-   <div class="icheck-danger d-inline">
-                        <input type="checkbox" class="singlechkbox" id="checkboxdanger4" name="news[]" value="4">
-                        <label for="checkboxdanger4">
-                        </label>
-                      </div>
-  
-</td>
-				
-				  <td>Cedric Kelly</td>
-				  <td>Senior Javascript Developer</td>
-				  <td>Edinburgh</td>
-				  <td>22</td>
-				  <td>2012/03/29</td>
-				  <td>$433,060</td>
-				</tr>
-		
-			<?php /*$sno=1;
-			//if(is_array($badge_records)):
-			//foreach ($badge_records as $records): 
-			?>
-                <tr>
-                  <td><?=$sno;?></td>
-                  <td><?=$records->Badges_Tittle;?></td>
-                  <td><?=$records->Badges_Remark;?></td>
-                  
-                  <td><img src="<?=base_url().'assets/uploads/'.$records->Badges_Img;?>" width="35"></td>
-				  
-                  <td><?=$records->UserName;?></td>
-                  <td><?php if($records->Badges_Sts === 'A'){ ?><span style="color:green;">Active</span><?php } else{ ?><span style="color:red;"> Deactive </span><?php } ?></td>
-				  <td><a href="<?php echo site_url('badge/add_badgedata/'.$records->BadgesId); ?>"><img title="Edit" src="<?= base_url()?>assets/img/edit.png" /></a> <a href="<?php echo site_url('badge/delete_badgedata/'.$records->BadgesId); ?>"><img title="Delete" src="<?= base_url()?>assets/img/delete1.png" onClick="return confirm('Are you sure you want to delete?')" /></a></td>
-                </tr>
-				<?php
-                 $sno++;
-				endforeach;
-                endif;				
-			   */ ?>
+                <?php if(count($feeds)>0){
+                    foreach($feeds as $feed){ ?>
+                  		
+                  		<tr>
+        					<td>
+            					<div class="icheck-danger d-inline">
+                                    <input type="checkbox" class="singlechkbox" id="checkboxdanger1" name="news[]" value="<?php echo $feed['guid']; ?>">
+                                    <label for="checkboxdanger1"></label>
+                                </div>							
+        					</td>	
+        				  	<td><?php echo $feed['slug_hindi']; ?></td>
+        				  	<td><?php echo $feed['slug_eng']; ?></td>
+        				  	<td><?php echo substr($feed['content'],0,200); ?></td>
+        				  	<td><?php echo $feed['category_name_hindi']; ?></td>
+        				  	<td><?php echo $feed['state']; ?></td>
+        				  	<td><?php echo $feed['city_name_hindi']; ?></td>
+        				</tr>
+                  		      
+                <?php }
+                } ?>
                 </tbody>
               </table>
             </div>
