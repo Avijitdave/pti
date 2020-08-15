@@ -66,10 +66,9 @@ class Pti extends CI_Controller {
         	        $temp['guid'] = $result['guid'];
         	        $temp['link'] = $result['link'];
         	        $temp['slug_hindi'] = $result['Slug'];
-        	        //$temp['slug_eng'] = str_replace(' ', '-', $this->trans($temp['slug_hindi']));
-        	        $temp['slug_eng'] = '';
+        	        $temp['slug_eng'] = str_replace(' ', '-', $this->trans($temp['slug_hindi']));
         	        $temp['origin_hindi'] = trim($result['origin'],'.');
-        	        //$temp['origin_eng'] = $this->trans($temp['origin_hindi']);
+        	        $temp['origin_eng'] = $this->trans($temp['origin_hindi']);
         	        $temp['origin_eng'] = '';
         	        $temp['meta_tag'] = $temp['slug_hindi'].$temp['slug_eng'];
         	        $temp['content'] = $result['content'];
