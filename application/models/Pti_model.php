@@ -38,7 +38,6 @@ class Pti_model extends CI_Model {
 	    else if($cate == 'SNS'){
 	        $temp['ibc_category'] = '98';
 	    }
-	    
 	    else {
 			$city = trim($city,'.');
 	        $result = $this->db->query("select id,state_short_code from ibc_cities where city_name_hindi = '$city'")->result_array();   
@@ -80,6 +79,7 @@ class Pti_model extends CI_Model {
 	        }
 			else {
 				$temp['ibc_category'] = '3';                   //national
+				$temp['categories'] = 'DEL';
 			}
 	    }
 	    return $temp;
@@ -96,5 +96,4 @@ class Pti_model extends CI_Model {
 	    $data['feeds'] = $this->db->get_where('ibc_news_pti inp',array('date(inp.published)'=>'2020-08-07','inp.status'=>1))->result_array();
 	    return $data['feeds'];
 	}
-	
 }

@@ -26,6 +26,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$config['base_url'] = 'http://localhost:82/pti/';
 $config['base_url'] = 'http://localhost/pti/';
 
+$config['subscription_key'] = "1590ac43399f447fa3b973ba2b0ccd6c";
+$config['endpoint'] = "https://api.cognitive.microsofttranslator.com";
+$config['path'] = "/translate?api-version=3.0";
+$config['params'] = "&to=en";
+
+$config['bhashaId'] = '101';
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -159,8 +165,8 @@ $config['composer_autoload'] = FALSE;
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
 */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
-
+//$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-@\=,';
 /*
 |--------------------------------------------------------------------------
 | Enable Query Strings
