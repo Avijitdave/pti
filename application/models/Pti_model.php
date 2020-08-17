@@ -36,7 +36,7 @@ class Pti_model extends CI_Model {
 	        $temp['ibc_category'] = '6';
 	    }
 	    else if($cate == 'SNS'){
-	        $temp['ibc_category'] = '98';
+	        $temp['ibc_category'] = '93';
 	    }
 	    else {
 			$city = trim($city,'.');
@@ -57,19 +57,19 @@ class Pti_model extends CI_Model {
 					$temp['city_id'] = $result[0]['id'];
 	            }
 	            else if($result[0]['state_short_code'] == 'UP'){
-	                $temp['ibc_category'] = '96';
+	                $temp['ibc_category'] = '91';
 	                $temp['state_id'] = '38';
 					$temp['state'] = 'उत्तर प्रदेश';
 					$temp['city_id'] = $result[0]['id'];
 	            }
 	            else if($result[0]['state_short_code'] == 'MH'){
-	                $temp['ibc_category'] = '97';
+	                $temp['ibc_category'] = '92';
 	                $temp['state_id'] = '22';
 					$temp['state'] = 'महाराष्ट्र';
 					$temp['city_id'] = $result[0]['id'];
 	            }
 	            else if($result[0]['state_short_code'] == 'BR'){
-	                $temp['ibc_category'] = '95';
+	                $temp['ibc_category'] = '90';
 	                $temp['state_id'] = '5';
 					$temp['state'] = 'बिहार';
 					$temp['city_id'] = $result[0]['id'];

@@ -176,7 +176,7 @@ class Pti extends CI_Controller {
     	        }
     	        
     	        else if($ptiRecord['categories'] == 'PRD'){
-    	              if($ptiRecord['ibc_category'] == '96' || $ptiRecord['ibc_category'] == '95'|| $ptiRecord['ibc_category'] == '97'){
+    	              if($ptiRecord['ibc_category'] == '91' || $ptiRecord['ibc_category'] == '90'|| $ptiRecord['ibc_category'] == '92'){
     	                $this->Pti_model->prd_submit($ptiRecord);
     	                
     	            } else {
@@ -184,7 +184,7 @@ class Pti extends CI_Controller {
     	            }
     	        }
     	        else {                 //DEL
-    	            if($ptiRecord['ibc_category'] == '96' || $ptiRecord['ibc_category'] == '95'|| $ptiRecord['ibc_category'] == '97'){
+    	            if($ptiRecord['ibc_category'] == '91' || $ptiRecord['ibc_category'] == '90'|| $ptiRecord['ibc_category'] == '92'){
     	                $this->Pti_model->del_submit($ptiRecord);
     	                
     	            } else {
