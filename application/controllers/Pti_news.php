@@ -24,6 +24,7 @@ class Pti_news extends CI_Controller {
 	{
 		//$data['badge_records'] = $this->login_model->get_badge_records();
 		$this->load->model('Pti_model');
+		$data['header'] = $this->load->view('include/headercss','',true);
 		$data['feeds'] = $this->Pti_model->news();
 		$this->load->view('pti_news',$data);
 	}

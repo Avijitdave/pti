@@ -66,9 +66,10 @@ class Pti extends CI_Controller {
         	        $temp['guid'] = $result['guid'];
         	        $temp['link'] = $result['link'];
         	        $temp['slug_hindi'] = $result['Slug'];
-        	        $temp['slug_eng'] = str_replace(' ', '-', $this->trans($temp['slug_hindi']));
+        	        //$temp['slug_eng'] = str_replace(' ', '-', $this->trans($temp['slug_hindi']));
+        	        $temp['slug_eng'] = '';
         	        $temp['origin_hindi'] = trim($result['origin'],'.');
-        	        $temp['origin_eng'] = $this->trans($temp['origin_hindi']);
+        	        //$temp['origin_eng'] = $this->trans($temp['origin_hindi']);
         	        $temp['origin_eng'] = '';
         	        $temp['meta_tag'] = $temp['slug_hindi'].$temp['slug_eng'];
         	        $temp['content'] = $result['content'];
@@ -103,9 +104,9 @@ class Pti extends CI_Controller {
     	    $ptiRecords = $this->Pti_model->news();
     	    
     	    foreach($ptiRecords as $ptiRecord){
+    	        $db2 = $this->load->database('main', TRUE);
+    	        
     	        if($ptiRecord['categories'] == 'KHL' || $ptiRecord['categories'] == 'VID' || $ptiRecord['categories'] == 'ART' || $ptiRecord['categories'] == 'SNS'){
-    	            $db2 = $this->load->database('main', TRUE);
-    	            
     	            $temp = array();
     	            $temp['news_name_hindi'] = $ptiRecord['slug_hindi'];
     	            $temp['news_name_english'] = $ptiRecord['slug_eng'];
@@ -145,7 +146,7 @@ class Pti extends CI_Controller {
                     $db2->update('ibc_news',array('slug'=>$ptiRecord['slug_eng'].'-'.$insertId));
 
                     //insert record on table ibc_news_categories
-                    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category']));
+                    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
 
                     //update local record
                     $this->db->where('guid',$ptiRecord['guid']);
@@ -154,54 +155,102 @@ class Pti extends CI_Controller {
     	        
     	        else if($ptiRecord['categories'] == 'PRD'){
     	            if($ptiRecord['ibc_category'] != '29' && $ptiRecord['ibc_category'] != '30'){
-//     	                $temp = array();
-//     	                $temp['news_name_hindi'] = $ptiRecord['slug_hindi'];
-//     	                $temp['news_name_english'] = $ptiRecord['slug_eng'];
-//     	                $temp['news_content'] = $ptiRecord['content'];
-//     	                $temp['meta_title'] = NULL;
-//     	                $temp['cannonical_link'] = NULL;
-//     	                $temp['slug'] = $ptiRecord['slug_eng'].'-'.date('U');
-//     	                $temp['meta_description'] = $ptiRecord['meta_tag'];
-//     	                $temp['meta_keywords'] = NULL;
-//     	                $temp['status'] = 'Published';
-//     	                $temp['published_by'] = $this->config->item('bhashaId');
-//     	                $temp['publish_datetime'] = date('Y-m-d H:i:s');
-//     	                $temp['created_by'] = $this->config->item('bhashaId');
-//     	                $temp['updated_by'] = NULL;
-//     	                $temp['country_id'] = '101';
-//     	                $temp['country'] = 'इंडिया';
-//     	                $temp['state_id'] = NULL;
-//     	                $temp['state'] = NULL;
-//     	                $temp['city_id'] = NULL;
-//     	                $temp['city'] = NULL;
-//     	                $temp['is_do_follow'] = 'No';
-//     	                $temp['standout_tags'] = 'No';
-//     	                $temp['reported_by'] = $this->config->item('bhashaId');
-//     	                $temp['updated_datetime'] = date('Y-m-d H:i:s');
-//     	                $temp['our_rating'] = '0.5';
-//     	                $temp['critics_rating'] = '0.5';
-//     	                $temp['static_tags'] = NULL;
-//     	                $temp['user_tags'] = NULL;
-//     	                $temp['content_type'] = 'news';
+    	                $temp = array();
+    	                $temp['news_name_hindi'] = $ptiRecord['slug_hindi'];
+    	                $temp['news_name_english'] = $ptiRecord['slug_eng'];
+    	                $temp['news_content'] = $ptiRecord['content'];
+    	                $temp['meta_title'] = NULL;
+    	                $temp['cannonical_link'] = NULL;
+    	                $temp['slug'] = $ptiRecord['slug_eng'].'-'.date('U');
+    	                $temp['meta_description'] = $ptiRecord['meta_tag'];
+    	                $temp['meta_keywords'] = NULL;
+    	                $temp['status'] = 'Published';
+    	                $temp['published_by'] = $this->config->item('bhashaId');
+    	                $temp['publish_datetime'] = date('Y-m-d H:i:s');
+    	                $temp['created_by'] = $this->config->item('bhashaId');
+    	                $temp['updated_by'] = NULL;
+    	                $temp['country_id'] = '101';
+    	                $temp['country'] = 'इंडिया';
+    	                $temp['state_id'] = $ptiRecord['state_id'];
+    	                $temp['state'] = $ptiRecord['state'];
+    	                $temp['city_id'] = $ptiRecord['city_id'];;
+    	                $temp['city'] = NULL;
+    	                $temp['is_do_follow'] = 'No';
+    	                $temp['standout_tags'] = 'No';
+    	                $temp['reported_by'] = $this->config->item('bhashaId');
+    	                $temp['updated_datetime'] = date('Y-m-d H:i:s');
+    	                $temp['our_rating'] = '0.5';
+    	                $temp['critics_rating'] = '0.5';
+    	                $temp['static_tags'] = NULL;
+    	                $temp['user_tags'] = NULL;
+    	                $temp['content_type'] = 'news';
     	                
-//     	                //insert record on table ibc_news
-//     	                $db2->insert('ibc_news',$temp);
+    	                //insert record on table ibc_news
+    	                $db2->insert('ibc_news',$temp);
     	                
-//     	                ///update slug inserted record
-//     	                $insertId = $db2->insert_id();
-//     	                $db2->where('id',$insertId);
-//     	                $db2->update('ibc_news',array('slug'=>$ptiRecord['slug_eng'].'-'.$insertId));
+    	                ///update slug inserted record
+    	                $insertId = $db2->insert_id();
+    	                $db2->where('id',$insertId);
+    	                $db2->update('ibc_news',array('slug'=>$ptiRecord['slug_eng'].'-'.$insertId));
     	                
-//     	                //insert record on table ibc_news_categories
-//     	                $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category']));
+    	                //insert record on table ibc_news_categories
+   	                    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>2,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+   	                    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	                
-//     	                //update local record
-//     	                $this->db->where('guid',$ptiRecord['guid']);
-//     	                $this->db->update('ibc_news_pti',array('status'=>0));
+    	                //update local record
+    	                $this->db->where('guid',$ptiRecord['guid']);
+    	                $this->db->update('ibc_news_pti',array('status'=>0));
     	                
     	            } else {
-    	                echo "hold";
+    	                echo "on hold";
     	            }
+    	        }
+    	        else {                 //DEL
+    	            $temp = array();
+    	            $temp['news_name_hindi'] = $ptiRecord['slug_hindi'];
+    	            $temp['news_name_english'] = $ptiRecord['slug_eng'];
+    	            $temp['news_content'] = $ptiRecord['content'];
+    	            $temp['meta_title'] = NULL;
+    	            $temp['cannonical_link'] = NULL;
+    	            $temp['slug'] = $ptiRecord['slug_eng'].'-'.date('U');
+    	            $temp['meta_description'] = $ptiRecord['meta_tag'];
+    	            $temp['meta_keywords'] = NULL;
+    	            $temp['status'] = 'Published';
+    	            $temp['published_by'] = $this->config->item('bhashaId');
+    	            $temp['publish_datetime'] = date('Y-m-d H:i:s');
+    	            $temp['created_by'] = $this->config->item('bhashaId');
+    	            $temp['updated_by'] = NULL;
+    	            $temp['country_id'] = '101';
+    	            $temp['country'] = 'इंडिया';
+    	            $temp['state_id'] = $ptiRecord['state_id'];
+    	            $temp['state'] = $ptiRecord['state'];
+    	            $temp['city_id'] = $ptiRecord['city_id'];;
+    	            $temp['city'] = NULL;
+    	            $temp['is_do_follow'] = 'No';
+    	            $temp['standout_tags'] = 'No';
+    	            $temp['reported_by'] = $this->config->item('bhashaId');
+    	            $temp['updated_datetime'] = date('Y-m-d H:i:s');
+    	            $temp['our_rating'] = '0.5';
+    	            $temp['critics_rating'] = '0.5';
+    	            $temp['static_tags'] = NULL;
+    	            $temp['user_tags'] = NULL;
+    	            $temp['content_type'] = 'news';
+    	            
+    	            //insert record on table ibc_news
+    	            $db2->insert('ibc_news',$temp);
+    	            
+    	            ///update slug inserted record
+    	            $insertId = $db2->insert_id();
+    	            $db2->where('id',$insertId);
+    	            $db2->update('ibc_news',array('slug'=>$ptiRecord['slug_eng'].'-'.$insertId));
+    	            
+    	            //insert record on table ibc_news_categories
+    	            $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>3,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	            $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	            
+    	            //update local record
+    	            $this->db->where('guid',$ptiRecord['guid']);
+    	            $this->db->update('ibc_news_pti',array('status'=>0));
     	        }
     	    }
     	    
