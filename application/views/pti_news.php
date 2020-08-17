@@ -1,4 +1,4 @@
-<?php include('variable.php');?>
+
 <!DOCTYPE html>
 <html>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -44,6 +44,7 @@
     <section class="content">
 	
 	  <!-- Data tables-->
+	  <input type="text" id="baseUrl" value="<?php echo base_url();?>">
 	  <div class="box">
             <div class="box-header">
               <h3 class="box-title" >PTI News List</h3><br><br>
@@ -54,14 +55,8 @@
                <select class="form-control select2" id="table-filter">
                   <option value="">All</option>
 				  <option>Chhattisgarh</option>
-				  <option>Madhya Pradesh</option>		
-				  <option>Maharashtra</option>
-				  <option>Bihar</option>
-				  <option>Uttar Pradesh</option>
-				  <option value="Country">National</option>
-				  <option>World</option>
-				  <option>Sport</option>
-				  <option>Business</option>				  
+				  <option>Madhya Pradesh</option>
+				  <option>National</option>
 
                 </select>
               </div>
@@ -91,11 +86,10 @@
                         </label>
                       </div>
 				  </th>
-                  <th>Tittle</th>
-                  <th>Slug</th>
+				  <th>News Category</th>
+                  <th>News Tittle</th>
+                  
                   <th>content</th>
-                  <th>Dev Category</th>
-                  <th>Category</th>
 				  <th>State</th>
 				  <th>City</th>
                 </tr>
@@ -108,15 +102,20 @@
                   		<tr>
         					<td>
             					<div class="icheck-danger d-inline">
-                                    <input type="checkbox" class="singlechkbox" id="checkboxdanger_<?php echo $c;?>" data-id="<?php echo $c;?>" name="news" value="<?php echo $feed['guid']; ?>">
-                                    <label for="checkboxdanger1"></label>
+                                    <input type="checkbox" class="singlechkbox" id="checkboxDanger_<?php echo $c;?>" data-id="<?php echo $c;?>" name="news" value="<?php echo $feed['guid']; ?>">
+                                    <label for="checkboxDanger_<?php echo $c; ?>"></label>
                                 </div>							
-        					</td>	
+        					</td>
+        					<td><?php
+        					if($feed['category_name_english'] == 'Country'){
+        					    echo 'National';
+        					} else {
+        					   echo $feed['category_name_english']; 
+        					}  ?></td>
+        					<!--td><?php //echo $feed['categories']; ?></td-->	
+        					
         				  	<td><?php echo $feed['slug_hindi']; ?></td>
-        				  	<td><?php echo $feed['slug_eng']; ?></td>
         				  	<td><?php echo substr($feed['content'],0,300); ?></td>
-        				  	<td><?php echo $feed['categories']; ?></td>
-        				  	<td><?php echo $feed['category_name_english']; ?></td>
         				  	<td><?php echo $feed['state_name_english']; ?></td>
         				  	<td><?php echo $feed['city_name_english']; ?></td>
         				</tr>
@@ -176,12 +175,15 @@
 </script>
  <script type="text/javascript">
     jQuery(function($) {
+        var baseUrl = $('#baseUrl').val();
+        
         $('body').on('click', '#checkboxSuccess1', function() {
               $('.singlechkbox').prop('checked', this.checked);
         });
  
         $(document).on('click', '.singlechkbox', function() {
             var id = $(this).data('id');
+            
             if($(".singlechkbox").length == $(".singlechkbox:checked").length) {
                 $("#checkboxSuccess_"+id).prop("checked", "checked");
             } else {
@@ -191,11 +193,26 @@
         });
 
 		$(document).on('click','#feed_pub',function(){
-			
-
+			var newsIds = [];
 			$("input:checkbox[name=news]:checked").each(function(){
 				console.log($(this).val());
-			    //yourArray.push($(this).val());
+			    newsIds.push($(this).val());
+			});
+
+
+			$.ajax({
+				type: 'POST',
+				url: baseUrl+'Pti/pti_submit',
+				data: {
+					'news' : newsIds
+				},
+				dataType: 'json',
+				beforeSend: function() {
+				},
+				success: function(response){
+					alert('done');
+					location.reload(true);
+				}
 			});
 			
 		});
