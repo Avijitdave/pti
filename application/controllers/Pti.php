@@ -68,7 +68,8 @@ class Pti extends CI_Controller {
         	        $temp['link'] = $result['link'];
         	        $temp['slug_hindi'] = $result['Slug'];
         	        $temp['title'] = $result['title'];
-        	        $temp['slug_eng'] = str_replace(' ', '-', $this->trans($result['title']));
+        	        $temp['title_eng'] = $this->trans($result['title']);
+        	        $temp['slug_eng'] = str_replace(' ', '-', $temp['title_eng']);
         	        $temp['origin_hindi'] = trim($result['origin'],'.');
         	        $temp['origin_eng'] = $this->trans($temp['origin_hindi']);
         	        $temp['meta_tag'] = $temp['slug_hindi'].' '.$temp['slug_eng'];
@@ -109,7 +110,7 @@ class Pti extends CI_Controller {
     	        if($ptiRecord['categories'] == 'KHL' || $ptiRecord['categories'] == 'VID' || $ptiRecord['categories'] == 'ART' || $ptiRecord['categories'] == 'SNS'){
     	            $temp = array();
     	            $temp['news_name_hindi'] = $ptiRecord['title'];
-    	            $temp['news_name_english'] = $ptiRecord['slug_eng'];
+    	            $temp['news_name_english'] = $ptiRecord['title_eng'];
     	            $temp['news_content'] = $ptiRecord['content'];
     	            $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	            $temp['cannonical_link'] = NULL;
@@ -118,7 +119,7 @@ class Pti extends CI_Controller {
     	            $temp['meta_keywords'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	            $temp['status'] = 'Published';
                     $temp['published_by'] = $this->config->item('bhashaId');
-    	            $temp['publish_datetime'] = date('Y-m-d H:i:s');
+    	            $temp['publish_datetime'] = $ptiRecord['published'];
     	            $temp['created_by'] = $this->config->item('bhashaId');
     	            $temp['updated_by'] = NULL;
     	            $temp['country_id'] = '101';
@@ -130,35 +131,14 @@ class Pti extends CI_Controller {
                     $temp['is_do_follow'] = 'No';
                     $temp['standout_tags'] = 'No';
                     $temp['reported_by'] = $this->config->item('bhashaId');
-                    $temp['updated_datetime'] = date('Y-m-d H:i:s');
+                    $temp['updated_datetime'] = $ptiRecord['updated'];
                     $temp['our_rating'] = '0.5';
                     $temp['critics_rating'] = '0.5';
                     $temp['static_tags'] = NULL;
                     $temp['user_tags'] = NULL;
                     $temp['content_type'] = 'news';
+                    $temp['created_at'] = $ptiRecord['published'];
                     
-                    if($ptiRecord['categories'] == 'KHL'){
-                        $temp['1000X563'] = '';
-                        $temp['1000X752'] = '';
-                        $temp['500X500'] = '';
-                    }
-                    
-                    else if($ptiRecord['categories'] == 'VID'){
-                        $temp['1000X563'] = '';
-                        $temp['1000X752'] = '';
-                        $temp['500X500'] = '';
-                    }
-                    else if($ptiRecord['categories'] == 'ART'){
-                        $temp['1000X563'] = '';
-                        $temp['1000X752'] = '';
-                        $temp['500X500'] = '';
-                    } 
-                    else if($ptiRecord['categories'] == 'SNS'){
-                        $temp['1000X563'] = '';
-                        $temp['1000X752'] = '';
-                        $temp['500X500'] = '';
-                    }
-    	            
                     //insert record on table ibc_news
                     $db2->insert('ibc_news',$temp);                
                     
@@ -169,7 +149,20 @@ class Pti extends CI_Controller {
 
                     //insert record on table ibc_news_categories
                     $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
-
+                    
+                    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    
+                    //media file
+                    if($ptiRecord['categories'] == 'KHL'){
+                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('khl_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    } else if($ptiRecord['categories'] == 'VID'){
+                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('vid_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    } else if($ptiRecord['categories'] == 'ART'){
+                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('art_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    } else if($ptiRecord['categories'] == 'SNS'){
+                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('sns_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    }
+                    
                     //update local record
                     $this->db->where('guid',$ptiRecord['guid']);
                     $this->db->update('ibc_news_pti',array('status'=>0));

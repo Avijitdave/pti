@@ -123,7 +123,7 @@ class Pti_model extends CI_Model {
 	    $this->db->trans_begin();
     	    $temp = array();
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
-    	    $temp['news_name_english'] = $ptiRecord['slug_eng'];
+    	    $temp['news_name_english'] = $ptiRecord['title_eng'];
     	    $temp['news_content'] = $ptiRecord['content'];
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
@@ -132,7 +132,7 @@ class Pti_model extends CI_Model {
     	    $temp['meta_keywords'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['status'] = 'Published';
     	    $temp['published_by'] = $this->config->item('bhashaId');
-    	    $temp['publish_datetime'] = date('Y-m-d H:i:s');
+    	    $temp['publish_datetime'] = $ptiRecord['published'];
     	    $temp['created_by'] = $this->config->item('bhashaId');
     	    $temp['updated_by'] = NULL;
     	    $temp['country_id'] = '101';
@@ -144,15 +144,16 @@ class Pti_model extends CI_Model {
     	    $temp['is_do_follow'] = 'No';
     	    $temp['standout_tags'] = 'No';
     	    $temp['reported_by'] = $this->config->item('bhashaId');
-    	    $temp['updated_datetime'] = date('Y-m-d H:i:s');
+    	    $temp['updated_datetime'] = $ptiRecord['updated'];
     	    $temp['our_rating'] = '0.5';
     	    $temp['critics_rating'] = '0.5';
     	    $temp['static_tags'] = NULL;
     	    $temp['user_tags'] = NULL;
     	    $temp['content_type'] = 'news';
-    	    $temp['1000X563'] = '';
-    	    $temp['1000X752'] = '';
-    	    $temp['500X500'] = '';
+    	    $temp['created_at'] = $ptiRecord['published'];
+//     	    $temp['1000X563'] = '';
+//     	    $temp['1000X752'] = '';
+//     	    $temp['500X500'] = '';
     	    
     	    //insert record on table ibc_news
     	    $db2->insert('ibc_news',$temp);
@@ -165,6 +166,11 @@ class Pti_model extends CI_Model {
     	    //insert record on table ibc_news_categories
     	    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>3,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    
+    	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    
+    	    //media file
+    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('del_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
     	    //update local record
     	    $this->db->where('guid',$ptiRecord['guid']);
@@ -186,7 +192,7 @@ class Pti_model extends CI_Model {
 	    
     	    $temp = array();
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
-    	    $temp['news_name_english'] = $ptiRecord['slug_eng'];
+    	    $temp['news_name_english'] = $ptiRecord['title_eng'];
     	    $temp['news_content'] = $ptiRecord['content'];
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
@@ -195,7 +201,7 @@ class Pti_model extends CI_Model {
     	    $temp['meta_keywords'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['status'] = 'Published';
     	    $temp['published_by'] = $this->config->item('bhashaId');
-    	    $temp['publish_datetime'] = date('Y-m-d H:i:s');
+    	    $temp['publish_datetime'] = $ptiRecord['published'];
     	    $temp['created_by'] = $this->config->item('bhashaId');
     	    $temp['updated_by'] = NULL;
     	    $temp['country_id'] = '101';
@@ -207,15 +213,13 @@ class Pti_model extends CI_Model {
     	    $temp['is_do_follow'] = 'No';
     	    $temp['standout_tags'] = 'No';
     	    $temp['reported_by'] = $this->config->item('bhashaId');
-    	    $temp['updated_datetime'] = date('Y-m-d H:i:s');
+    	    $temp['updated_datetime'] = $ptiRecord['updated'];
     	    $temp['our_rating'] = '0.5';
     	    $temp['critics_rating'] = '0.5';
     	    $temp['static_tags'] = NULL;
     	    $temp['user_tags'] = NULL;
     	    $temp['content_type'] = 'news';
-    	    $temp['1000X563'] = '';
-    	    $temp['1000X752'] = '';
-    	    $temp['500X500'] = '';
+    	    $temp['created_at'] = $ptiRecord['published'];
     	    
     	    //insert record on table ibc_news
     	    $db2->insert('ibc_news',$temp);
@@ -228,6 +232,13 @@ class Pti_model extends CI_Model {
     	    //insert record on table ibc_news_categories
     	    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>2,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    $db2->insert('ibc_news_categories',array('news_id'=>$insertId,'category_id'=>$ptiRecord['ibc_category'],'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    
+    	    /// ibc news media
+    	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    
+    	    //media file
+    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('prd_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    
     	    
     	    //update local record
     	    $this->db->where('guid',$ptiRecord['guid']);
