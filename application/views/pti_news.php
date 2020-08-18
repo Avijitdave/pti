@@ -44,7 +44,7 @@
     <section class="content">
 	
 	  <!-- Data tables-->
-	  <input type="text" id="baseUrl" value="<?php echo base_url();?>">
+	  <input type="hidden" id="baseUrl" value="<?php echo base_url();?>">
 	  <div class="box">
             <div class="box-header">
               <h3 class="box-title" >PTI News List</h3><br><br>
@@ -114,7 +114,7 @@
         					}  ?></td>
         					<!--td><?php //echo $feed['categories']; ?></td-->	
         					
-        				  	<td><?php echo $feed['slug_hindi']; ?></td>
+        				  	<td><?php echo $feed['title']; ?></td>
         				  	<td><?php echo substr($feed['content'],0,300); ?></td>
         				  	<td><?php echo $feed['state_name_english']; ?></td>
         				  	<td><?php echo $feed['city_name_english']; ?></td>
