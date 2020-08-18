@@ -57,6 +57,8 @@ class Pti extends CI_Controller {
 	    $results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
 	    if(count($results['items'])>0){
 	        
+	        $this->db->trans_begin();
+	        
     	    $newsList = array();
     	    foreach($results['items'] as $result){
     	        $this->db->select('*');
@@ -70,7 +72,7 @@ class Pti extends CI_Controller {
         	        $temp['title'] = $result['title'];
         	        $temp['title_eng'] = $this->trans($result['title']);
         	        $temp['slug_eng'] = str_replace(' ', '-', $temp['title_eng']);
-        	        $temp['origin_hindi'] = trim($result['origin'],'.');
+        	        $temp['origin_hindi'] = trim(trim($result['origin'],'.'));
         	        $temp['origin_eng'] = $this->trans($temp['origin_hindi']);
         	        $temp['meta_tag'] = $temp['slug_hindi'].' '.$temp['slug_eng'];
         	        $temp['content'] = $result['content'];
@@ -184,6 +186,15 @@ class Pti extends CI_Controller {
     	                echo "on hold";
     	            }
     	        }
+    	    }
+    	    
+    	    if ($this->db->trans_status() === FALSE){
+    	        $this->db->trans_rollback();
+    	        return false;
+    	    }
+    	    else{
+    	        $this->db->trans_commit();
+    	        return true;
     	    }
     	    
 	    } else {

@@ -39,7 +39,7 @@ class Pti_model extends CI_Model {
 	        $temp['ibc_category'] = '93';
 	    }
 	    else {
-			$city = trim($city,'.');
+			$city = trim(trim($city,'.'));
 	        
 	        $result = $this->db->query("select id,state_short_code from ibc_cities where city_name_english = '$city'")->result_array();   
 	        if(count($result)>0){

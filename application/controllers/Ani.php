@@ -12,8 +12,8 @@ class Ani extends CI_Controller {
     }
     
     
-    public function ani_json(){
-        $results = json_decode(file_get_contents("http://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=76d2475825c34620b550fac48aa50291"),true);
+    public function ani_json($categoty){
+        $results = json_decode(file_get_contents("http://newsapi.org/v2/top-headlines?country=in&category=".$categoty."&apiKey=76d2475825c34620b550fac48aa50291"),true);
         print_r($results); die;
     }
 }
