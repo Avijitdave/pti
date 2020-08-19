@@ -28,11 +28,12 @@ $db['default'] = array(
 
 $db['main'] = array(
     'dsn'	=> '',
-    //'hostname' => '192.168.25.239',
-    'hostname' => '103.125.53.49:8080',
-    'username' => 'ibc24_pti',
-    //'password' => '#SBmmpl123$',
-    'password' => '#SBmmpl@123$',
+    'hostname' => '192.168.25.239',
+    //'hostname' => '103.125.53.49:8080',
+	'username' => 'root',
+    //'username' => 'ibc24_pti',
+    'password' => '#SBmmpl123$',
+    //'password' => '#SBmmpl@123$',
     'database' => 'ibc25',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

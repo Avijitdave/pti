@@ -9,11 +9,6 @@ class Pti extends CI_Controller {
         $this->load->model(array('Pti_model'));
         $this->load->library(['form_validation','session','email']);
         $this->load->helper(['url', 'language','download']);
-        $db2 = $this->load->database('main', TRUE);
-        $db2->select('*');
-        $db2->limit(10);
-        $result = $db2->get_where('ibc_news',array('1'=>1))->result_array();
-        print_r($result); die;
     }
     
     
