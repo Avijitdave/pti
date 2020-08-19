@@ -169,8 +169,10 @@ class Pti_model extends CI_Model {
     	    
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
+    	    $db2->insert('ibc_medias',array('title'=>'MPCC Ram.png','name'=>'1597155260MPCC-Ram.webp','path'=>'storage/news/1597155260MPCC-Ram.webp','thumb_path'=>'storage/news/thumbs/1597155260MPCC-Ram.webp','size'=>'0','description'=>'','media_type'=>'image'));
+    	    $mediaInsertId = $db2->insert_id();
     	    //media file
-    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('del_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
     	    //update local record
     	    $this->db->where('guid',$ptiRecord['guid']);
@@ -236,8 +238,11 @@ class Pti_model extends CI_Model {
     	    /// ibc news media
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
+    	    $db2->insert('ibc_medias',array('title'=>'MPCC Ram.png','name'=>'1597155260MPCC-Ram.webp','path'=>'storage/news/1597155260MPCC-Ram.webp','thumb_path'=>'storage/news/thumbs/1597155260MPCC-Ram.webp','size'=>'0','description'=>'','media_type'=>'image'));
+    	    $mediaInsertId = $db2->insert_id();
+    	    
     	    //media file
-    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('prd_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+    	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
     	    
     	    //update local record

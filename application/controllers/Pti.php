@@ -11,6 +11,7 @@ class Pti extends CI_Controller {
         $this->load->helper(['url', 'language','download']);
     }
     
+    
     function com_create_guid() {
         return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
@@ -54,7 +55,8 @@ class Pti extends CI_Controller {
 	
 	
 	public function pti_json(){
-	    $results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
+	    $results = json_decode(file_get_contents("http://localhost:82/ptijson.json"),true);
+	    //$results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d H:00:00')),true);
 	    if(count($results['items'])>0){
 	        
 	        $this->db->trans_begin();
@@ -154,16 +156,12 @@ class Pti extends CI_Controller {
                     
                     $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
                     
+                    $db2->insert('ibc_medias',array('title'=>'MPCC Ram.png','name'=>'1597155260MPCC-Ram.webp','path'=>'storage/news/1597155260MPCC-Ram.webp','thumb_path'=>'storage/news/thumbs/1597155260MPCC-Ram.webp','size'=>'0','description'=>'','media_type'=>'image'));
+                    $mediaInsertId = $db2->insert_id();
                     //media file
-                    if($ptiRecord['categories'] == 'KHL'){
-                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('khl_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
-                    } else if($ptiRecord['categories'] == 'VID'){
-                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('vid_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
-                    } else if($ptiRecord['categories'] == 'ART'){
-                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('art_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
-                    } else if($ptiRecord['categories'] == 'SNS'){
-                        $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$this->config->item('sns_imgId'),'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
-                    }
+                    
+                    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
+                    
                     
                     //update local record
                     $this->db->where('guid',$ptiRecord['guid']);
