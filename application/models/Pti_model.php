@@ -2,6 +2,47 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pti_model extends CI_Model {
+    
+    function com_create_guid() {
+        return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0xffff ),
+            mt_rand( 0, 0x0fff ) | 0x4000,
+            mt_rand( 0, 0x3fff ) | 0x8000,
+            mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+            );
+    }
+    
+    function Translate ($host, $path, $key, $params, $content) {
+        $headers = "Content-type: application/json\r\n" .
+            "Content-length: " . strlen($content) . "\r\n" .
+            "Ocp-Apim-Subscription-Key: $key\r\n" .
+            "X-ClientTraceId: " . $this->com_create_guid() . "\r\n";
+        
+        $options = array (
+            'http' => array (
+                'header' => $headers,
+                'method' => 'POST',
+                'content' => $content
+            )
+        );
+        
+        $context  = stream_context_create ($options);
+        $result = file_get_contents ($host . $path . $params, false, $context);
+        return $result;
+    }
+    
+    public function trans($text){
+        $text = urldecode($text);
+        
+        $requestBody = array (
+            array ('Text' => $text,),
+        );
+        $content = json_encode($requestBody);
+        $result = $this->Translate ($this->config->item('endpoint'), $this->config->item('path'), $this->config->item('subscription_key'), $this->config->item('params'), $content);
+        $json = json_decode(json_encode(json_decode($result), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),true);
+        return $json[0]['translations'][0]['text'];
+    }
 
     public function getCities($state=null,$city=null){
 	    $this->db->select('*');
@@ -174,6 +215,54 @@ class Pti_model extends CI_Model {
     	    //media file
     	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
+    	    /*
+    	     * keyword
+    	     */
+    	    
+    	    $slugEnglish = $this->trans($ptiRecord['slug_hindi']);
+    	    $keywords = explode(' ', $slugEnglish);
+    	    $keywordTemp = array();
+    	    foreach($keywords as $keyword){
+    	        $temp = array();
+    	        
+    	        $db2->select('*');
+    	        $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1))->result_array();
+    	        if(count($keyresult)>0){
+    	            $temp['keyword_id'] = $keyresult[0]['id'];
+    	            $temp['news_id'] = $insertId;
+    	        } else {
+    	            $db2->insert('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1,'is_special_news_keyword'=>'0'));
+    	            $temp['keyword_id'] = $db2->insert_id();
+    	            $temp['news_id'] = $insertId;
+    	        }
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	        $keywordTemp[] = $temp;
+    	    }
+    	    
+    	    
+    	    $temp = array();
+    	    $db2->select('*');
+    	    $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1))->result_array();
+    	    if(count($keyresult)>0){
+    	        $temp['keyword_id'] = $keyresult[0]['id'];
+    	        $temp['news_id'] = $insertId;
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	    } else {
+    	        $db2->insert('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1,'is_special_news_keyword'=>'0'));
+    	        $temp['keyword_id'] = $db2->insert_id();
+    	        $temp['news_id'] = $insertId;
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	    }
+    	    $keywordTemp[] = $temp;
+    	    
+    	    $db2->insert_batch('ibc_news_keywords',$keywordTemp);
+    	    /*
+    	     * keyword closed
+    	     */
+    	    
     	    //update local record
     	    $this->db->where('guid',$ptiRecord['guid']);
     	    $this->db->update('ibc_news_pti',array('status'=>0));
@@ -245,6 +334,54 @@ class Pti_model extends CI_Model {
     	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
     	    
+    	    /*
+    	     * keyword
+    	     */
+    	    
+    	    $slugEnglish = $this->trans($ptiRecord['slug_hindi']);
+    	    $keywords = explode(' ', $slugEnglish);
+    	    $keywordTemp = array();
+    	    foreach($keywords as $keyword){
+    	        $temp = array();
+    	        
+    	        $db2->select('*');
+    	        $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1))->result_array();
+    	        if(count($keyresult)>0){
+    	            $temp['keyword_id'] = $keyresult[0]['id'];
+    	            $temp['news_id'] = $insertId;
+    	        } else {
+    	            $db2->insert('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1,'is_special_news_keyword'=>'0'));
+    	            $temp['keyword_id'] = $db2->insert_id();
+    	            $temp['news_id'] = $insertId;
+    	        }
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	        $keywordTemp[] = $temp;
+    	    }
+    	    
+    	    
+    	    $temp = array();
+    	    $db2->select('*');
+    	    $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1))->result_array();
+    	    if(count($keyresult)>0){
+    	        $temp['keyword_id'] = $keyresult[0]['id'];
+    	        $temp['news_id'] = $insertId;
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	    } else {
+    	        $db2->insert('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1,'is_special_news_keyword'=>'0'));
+    	        $temp['keyword_id'] = $db2->insert_id();
+    	        $temp['news_id'] = $insertId;
+    	        $temp['created_at'] = date('Y-m-d H:i:s');
+    	        $temp['updated_at'] = date('Y-m-d H:i:s');
+    	    }
+    	    $keywordTemp[] = $temp;
+    	    
+    	    $db2->insert_batch('ibc_news_keywords',$keywordTemp);
+    	    /*
+    	     * keyword closed
+    	     */
+    	
     	    //update local record
     	    $this->db->where('guid',$ptiRecord['guid']);
     	    $this->db->update('ibc_news_pti',array('status'=>0));

@@ -57,10 +57,12 @@ class Pti extends CI_Controller {
 	public function pti_json(){
 	    $results = json_decode(file_get_contents("http://localhost:82/ptijson.json"),true);
 	    //$results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d H:00:00')),true);
+
 	    if(count($results['items'])>0){
 	        
 	        $this->db->trans_begin();
-	        
+	    
+	    if(count($results['items'])>0){    
     	    $newsList = array();
     	    foreach($results['items'] as $result){
     	        $this->db->select('*');
@@ -111,6 +113,11 @@ class Pti extends CI_Controller {
     	    foreach($ptiRecords as $ptiRecord){
     	        $db2 = $this->load->database('main', TRUE);
     	        
+    	    $this->db->trans_begin();
+    	    
+    	    $db2 = $this->load->database('main', TRUE);
+    	    $db2->trans_begin();
+    	    foreach($ptiRecords as $ptiRecord){
     	        if($ptiRecord['categories'] == 'KHL' || $ptiRecord['categories'] == 'VID' || $ptiRecord['categories'] == 'ART' || $ptiRecord['categories'] == 'SNS'){
     	            $temp = array();
     	            $temp['news_name_hindi'] = $ptiRecord['title'];
@@ -162,6 +169,53 @@ class Pti extends CI_Controller {
                     
                     $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
                     
+                    /*
+                     * keyword
+                     */
+                    
+                    $slugEnglish = $this->trans($ptiRecord['slug_hindi']);
+                    $keywords = explode(' ', $slugEnglish);
+                    $keywordTemp = array();
+                    foreach($keywords as $keyword){
+                        $temp = array();
+                        
+                        $db2->select('*');
+                        $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1))->result_array();
+                        if(count($keyresult)>0){
+                            $temp['keyword_id'] = $keyresult[0]['id'];
+                            $temp['news_id'] = $insertId;
+                        } else {
+                            $db2->insert('ibc_keywords',array('keyword'=>$keyword,'is_active'=>1,'is_special_news_keyword'=>'0'));
+                            $temp['keyword_id'] = $db2->insert_id();
+                            $temp['news_id'] = $insertId;
+                        }
+                        $temp['created_at'] = date('Y-m-d H:i:s');
+                        $temp['updated_at'] = date('Y-m-d H:i:s');
+                      $keywordTemp[] = $temp;
+                    }
+                    
+                    
+                    $temp = array();
+                    $db2->select('*');
+                    $keyresult = $db2->get_where('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1))->result_array();
+                    if(count($keyresult)>0){
+                        $temp['keyword_id'] = $keyresult[0]['id'];
+                        $temp['news_id'] = $insertId;
+                        $temp['created_at'] = date('Y-m-d H:i:s');
+                        $temp['updated_at'] = date('Y-m-d H:i:s');
+                    } else {
+                        $db2->insert('ibc_keywords',array('keyword'=>$slugEnglish,'is_active'=>1,'is_special_news_keyword'=>'0'));
+                        $temp['keyword_id'] = $db2->insert_id();
+                        $temp['news_id'] = $insertId;
+                        $temp['created_at'] = date('Y-m-d H:i:s');
+                        $temp['updated_at'] = date('Y-m-d H:i:s');
+                    }
+                    $keywordTemp[] = $temp;
+                    
+                    $db2->insert_batch('ibc_news_keywords',$keywordTemp);
+                    /*
+                     * keyword closed
+                     */
                     
                     //update local record
                     $this->db->where('guid',$ptiRecord['guid']);
@@ -193,6 +247,15 @@ class Pti extends CI_Controller {
     	    else{
     	        $this->db->trans_commit();
     	        return true;
+    	    if($db2->trans_status() == TRUE){
+        	    if ($this->db->trans_status() === FALSE){
+        	        $this->db->trans_rollback();
+        	        return false;
+        	    }
+        	    else{
+        	        $this->db->trans_commit();
+        	        return true;
+        	    }
     	    }
     	    
 	    } else {

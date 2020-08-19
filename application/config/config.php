@@ -26,6 +26,7 @@ error_reporting(error_reporting() & (-1 ^ E_DEPRECATED));
 */
 //$config['base_url'] = 'http://localhost:82/pti/';
 $config['base_url'] = 'http://localhost:82/pti/';
+//$config['base_url'] = 'http://192.168.25.184:82/pti/';
 
 $config['subscription_key'] = "1590ac43399f447fa3b973ba2b0ccd6c";
 $config['endpoint'] = "https://api.cognitive.microsofttranslator.com";
@@ -37,6 +38,9 @@ $config['prd_imgId'] = '115840';
 $config['del_imgId'] = '115839';
 
 $config['khl_imgId'] = '115838';
+$config['del_imgId'] = '115842';
+
+$config['khl_imgId'] = '115834';
 $config['vid_imgId'] = '115837';
 $config['art_imgId'] = '115836';
 $config['sns_imgId'] = '115835';
