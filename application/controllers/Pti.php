@@ -55,8 +55,8 @@ class Pti extends CI_Controller {
 	
 	
 	public function pti_json(){
-	    $results = json_decode(file_get_contents("http://localhost/ptijson.json"),true);
-	    //$results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
+	    //$results = json_decode(file_get_contents("http://localhost/ptijson.json"),true);
+	    $results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
 	    if(isset($results['items']) && count($results['items'])>0){
 	        
 	        $this->db->trans_begin();
