@@ -205,7 +205,6 @@ class Pti extends CI_Controller {
                         $temp['updated_at'] = date('Y-m-d H:i:s');
                     }
                     $keywordTemp[] = $temp;
-                    print_r($keywordTemp); die;
                     $db2->insert_batch('ibc_news_keywords',$keywordTemp);
                     /*
                      * keyword closed
@@ -257,4 +256,5 @@ class Pti extends CI_Controller {
 	        echo json_encode(array('status'=>200));
 	    }
 	}
+	
 }

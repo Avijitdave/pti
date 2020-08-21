@@ -139,6 +139,23 @@ class Pti_model extends CI_Model {
 	    return $data['feeds'];
 	}
 	
+	function archive_news($fromdate=null,$todate=null){
+	    $this->db->select('inp.*,ic.category_name_english,ici.city_name_english,is.state_name_english');
+	    $this->db->order_by('inp.published','desc');
+	    $this->db->join('ibc_categories ic','ic.id = inp.ibc_category','left');
+	    $this->db->join('ibc_cities ici','ici.id = inp.city_id','left');
+	    $this->db->join('ibc_states is','is.id = inp.state_id','left');
+	    $this->db->order_by('inp.published,inp.id','desc');
+	    if(!is_null($fromdate)){
+	       $this->db->where('date(inp.published)>=',$fromdate);
+	    }
+	    if(!is_null($todate)){
+	        $this->db->where('date(inp.published)<=',$todate);
+	    }
+	    $data['feeds'] = $this->db->get('ibc_news_pti inp')->result_array();
+	    return $data['feeds'];
+	}
+	
 	function pti_submit($data){
 	    foreach($data['guids'] as $feed){
 	        
@@ -396,4 +413,7 @@ class Pti_model extends CI_Model {
 	    }
 	    
 	}
+	
+	
+	
 }
