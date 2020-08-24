@@ -25,8 +25,8 @@ error_reporting(error_reporting() & (-1 ^ E_DEPRECATED));
 |
 */
 //$config['base_url'] = 'http://localhost:82/pti/';
-$config['base_url'] = 'http://localhost:82/pti/';
-//$config['base_url'] = 'http://192.168.25.184:82/pti/';
+//$config['base_url'] = 'http://localhost:82/pti/';
+$config['base_url'] = 'http://192.168.25.184:82/pti/';
 
 $config['subscription_key'] = "1590ac43399f447fa3b973ba2b0ccd6c";
 $config['endpoint'] = "https://api.cognitive.microsofttranslator.com";
@@ -34,16 +34,94 @@ $config['path'] = "/translate?api-version=3.0";
 $config['params'] = "&to=en";
 
 $config['bhashaId'] = '174';
-$config['prd_imgId'] = '115840';
-$config['del_imgId'] = '115839';
 
-$config['khl_imgId'] = '115838';
-$config['del_imgId'] = '115842';
+$config['khl_1'] = 'sports_breaking.webp';
+$config['khl_2'] = 'sports_breaking.webp';
+$config['khl_3'] = 'sports_breaking.webp';
+$config['khl_4'] = 'sports_breaking.webp';
+$config['khl_5'] = 'sports_breaking.webp';
+$config['khl_6'] = 'sports_breaking.webp';
+$config['khl_7'] = 'sports_breaking.webp';
+$config['khl_8'] = 'sports_breaking.webp';
+$config['khl_9'] = 'sports_breaking.webp';
+$config['khl_10'] = 'sports_breaking.webp';
 
-$config['khl_imgId'] = '115834';
-$config['vid_imgId'] = '115837';
-$config['art_imgId'] = '115836';
-$config['sns_imgId'] = '115835';
+$config['vid_1'] = 'world_breaking.webp';
+$config['vid_2'] = 'world_breaking.webp';
+$config['vid_3'] = 'world_breaking.webp';
+$config['vid_4'] = 'world_breaking.webp';
+$config['vid_5'] = 'world_breaking.webp';
+$config['vid_6'] = 'world_breaking.webp';
+$config['vid_7'] = 'world_breaking.webp';
+$config['vid_8'] = 'world_breaking.webp';
+$config['vid_9'] = 'world_breaking.webp';
+$config['vid_10'] = 'world_breaking.webp';
+
+$config['art_1'] = 'business_breaking.webp';
+$config['art_2'] = 'business_breaking.webp';
+$config['art_3'] = 'business_breaking.webp';
+$config['art_4'] = 'business_breaking.webp';
+$config['art_5'] = 'business_breaking.webp';
+$config['art_6'] = 'business_breaking.webp';
+$config['art_7'] = 'business_breaking.webp';
+$config['art_8'] = 'business_breaking.webp';
+$config['art_9'] = 'business_breaking.webp';
+$config['art_10'] = 'business_breaking.webp';
+
+$config['sns_1'] = 'business_breaking.webp';
+$config['sns_2'] = 'business_breaking.webp';
+$config['sns_3'] = 'business_breaking.webp';
+$config['sns_4'] = 'business_breaking.webp';
+$config['sns_5'] = 'business_breaking.webp';
+$config['sns_6'] = 'business_breaking.webp';
+$config['sns_7'] = 'business_breaking.webp';
+$config['sns_8'] = 'business_breaking.webp';
+$config['sns_9'] = 'business_breaking.webp';
+$config['sns_10'] = 'business_breaking.webp';
+
+$config['del_1'] = 'national_breaking.webp';
+$config['del_2'] = 'national_breaking.webp';
+$config['del_3'] = 'national_breaking.webp';
+$config['del_4'] = 'national_breaking.webp';
+$config['del_5'] = 'national_breaking.webp';
+$config['del_6'] = 'national_breaking.webp';
+$config['del_7'] = 'national_breaking.webp';
+$config['del_8'] = 'national_breaking.webp';
+$config['del_9'] = 'national_breaking.webp';
+$config['del_10'] = 'national_breaking.webp';
+
+$config['br_1'] = 'bihar_breaking.webp';
+$config['br_2'] = 'bihar_breaking.webp';
+$config['br_3'] = 'bihar_breaking.webp';
+$config['br_4'] = 'bihar_breaking.webp';
+$config['br_5'] = 'bihar_breaking.webp';
+$config['br_6'] = 'bihar_breaking.webp';
+$config['br_7'] = 'bihar_breaking.webp';
+$config['br_8'] = 'bihar_breaking.webp';
+$config['br_9'] = 'bihar_breaking.webp';
+$config['br_10'] = 'bihar_breaking.webp';
+
+$config['up_1'] = 'uttarpradesh_breaking.webp';
+$config['up_2'] = 'uttarpradesh_breaking.webp';
+$config['up_3'] = 'uttarpradesh_breaking.webp';
+$config['up_4'] = 'uttarpradesh_breaking.webp';
+$config['up_5'] = 'uttarpradesh_breaking.webp';
+$config['up_6'] = 'uttarpradesh_breaking.webp';
+$config['up_7'] = 'uttarpradesh_breaking.webp';
+$config['up_8'] = 'uttarpradesh_breaking.webp';
+$config['up_9'] = 'uttarpradesh_breaking.webp';
+$config['up_10'] = 'uttarpradesh_breaking.webp';
+
+$config['mh_1'] = 'maharashtra_breaking.webp';
+$config['mh_2'] = 'maharashtra_breaking.webp';
+$config['mh_3'] = 'maharashtra_breaking.webp';
+$config['mh_4'] = 'maharashtra_breaking.webp';
+$config['mh_5'] = 'maharashtra_breaking.webp';
+$config['mh_6'] = 'maharashtra_breaking.webp';
+$config['mh_7'] = 'maharashtra_breaking.webp';
+$config['mh_8'] = 'maharashtra_breaking.webp';
+$config['mh_9'] = 'maharashtra_breaking.webp';
+$config['mh_10'] = 'maharashtra_breaking.webp';
 
 /*
 |--------------------------------------------------------------------------

@@ -66,7 +66,7 @@
 		<div class="col-md-6">
 			<div class="card-footer">
                   <button type="button" class="btn btn-success" id="feed_pub">Publish News TO Website</button>
-                  <a class="btn btn-info" href="<?php echo base_url();?>Pti_news/archive">Pti News Archive</a>
+                  <!--  <a class="btn btn-info" href="<?php //echo base_url();?>Pti_news/archive">Pti News Archive</a>-->
                 </div>
 		</div>
 			  
@@ -211,7 +211,7 @@
 				beforeSend: function() {
 				},
 				success: function(response){
-					alert('done');
+					alert('News Published on Website');
 					location.reload(true);
 				}
 			});
