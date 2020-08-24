@@ -227,7 +227,9 @@ class Pti_model extends CI_Model {
     	    
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
-    	    $db2->insert('ibc_medias',array('title'=>'MPCC Ram.png','name'=>'1597155260MPCC-Ram.webp','path'=>'storage/news/1597155260MPCC-Ram.webp','thumb_path'=>'storage/news/thumbs/1597155260MPCC-Ram.webp','size'=>'0','description'=>'','media_type'=>'image'));
+    	    $imageId = rand(1,10);
+    	    $image = $this->config->item('del_'.$imageId);
+    	    $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
     	    $mediaInsertId = $db2->insert_id();
     	    //media file
     	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
@@ -344,7 +346,19 @@ class Pti_model extends CI_Model {
     	    /// ibc news media
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
-    	    $db2->insert('ibc_medias',array('title'=>'MPCC Ram.png','name'=>'1597155260MPCC-Ram.webp','path'=>'storage/news/1597155260MPCC-Ram.webp','thumb_path'=>'storage/news/thumbs/1597155260MPCC-Ram.webp','size'=>'0','description'=>'','media_type'=>'image'));
+    	    if($ptiRecord['ibc_category'] == '90'){
+    	        $imageId = rand(1,10);
+    	        $image = $this->config->item('br_'.$imageId);
+    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
+    	    } else if($ptiRecord['ibc_category'] == '91'){
+    	        $imageId = rand(1,10);
+    	        $image = $this->config->item('up_'.$imageId);
+    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
+    	    }if($ptiRecord['ibc_category'] == '92'){
+    	        $imageId = rand(1,10);
+    	        $image = $this->config->item('mh_'.$imageId);
+    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
+    	    }
     	    $mediaInsertId = $db2->insert_id();
     	    
     	    //media file
