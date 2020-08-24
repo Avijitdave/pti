@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 error_reporting(E_ALL ^ E_NOTICE);
 error_reporting(error_reporting() & (-1 ^ E_DEPRECATED));
+date_default_timezone_set("Asia/Kolkata");
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -25,7 +26,7 @@ error_reporting(error_reporting() & (-1 ^ E_DEPRECATED));
 |
 */
 //$config['base_url'] = 'http://localhost:82/pti/';
-$config['base_url'] = 'http://localhost:82/pti/';
+$config['base_url'] = 'http://localhost/pti/';
 //$config['base_url'] = 'http://192.168.25.184:82/pti/';
 
 $config['subscription_key'] = "1590ac43399f447fa3b973ba2b0ccd6c";
