@@ -55,8 +55,8 @@ class Pti extends CI_Controller {
 	
 	
 	public function pti_json(){
-	    //$results = json_decode(file_get_contents("http://localhost/ptijson.json"),true);
-	    $results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
+	    $results = json_decode(file_get_contents("http://localhost/ptijson.json"),true);
+	    //$results = json_decode(file_get_contents("http://editorial.pti.in/bhashajsontoken/webservice1.asmx/JsonFiley3?centercode=27072020001&n=400&FromTime=".date('Y/m/d')),true);
 	    if(isset($results['items']) && count($results['items'])>0){
 	        
 	        $this->db->trans_begin();
@@ -115,7 +115,8 @@ class Pti extends CI_Controller {
     	            $temp = array();
     	            $temp['news_name_hindi'] = $ptiRecord['title'];
     	            $temp['news_name_english'] = $ptiRecord['title_eng'];
-    	            $temp['news_content'] = $ptiRecord['content'];
+    	            //$temp['news_content'] = $ptiRecord['content'];
+    	            $temp['news_content'] = substr($ptiRecord['content'], 0,(strpos($ptiRecord['content'], '<p> भाषा</p>')+20));
     	            $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	            $temp['cannonical_link'] = NULL;
     	            $temp['slug'] = str_replace('-', ' ',$ptiRecord['slug_eng'].'-'.date('U'));
@@ -157,24 +158,35 @@ class Pti extends CI_Controller {
                     $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
                     
                     if($ptiRecord['categories'] == 'KHL'){
-                        $imageId = rand(1,10);
-                        $image = $this->config->item('khl_'.$imageId);
-                    }
-                    else if($ptiRecord['categories'] == 'VID'){
-                        $imageId = rand(1,10);
-                        $image = $this->config->item('vid_'.$imageId);
-                    }
-                    else if($ptiRecord['categories'] == 'ART'){
-                        $imageId = rand(1,10);
-                        $image = $this->config->item('art_'.$imageId);
-                    }
-                    else if($ptiRecord['categories'] == 'SNS'){
-                        $imageId = rand(1,10);
-                        $image = $this->config->item('sns_'.$imageId);
+                        $categoryId = '1';
+                    } else if($ptiRecord['categories'] == 'VID'){
+                        $categoryId = '2';
+                    } else if($ptiRecord['categories'] == 'ART'){
+                        $categoryId = '3';
+                    } else if($ptiRecord['categories'] == 'SNS'){
+                        $categoryId = '8';
                     }
                     
-                    $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
-                    $mediaInsertId = $db2->insert_id();
+                    $this->db->select('*');
+                    $categoryImages = $this->db->get_where('ibc_news_pti_medias',array('pti_category'=>$categoryId,'status'=>1))->result_array();
+                     
+                    if(count($categoryImages)>0){
+                        $imageId = rand(1,count($categoryImages));
+                        
+                        $db2->insert('ibc_medias',array(
+                            'title'=>$categoryImages[$imageId-1]['image'],
+                            'name'=>$categoryImages[$imageId-1]['image'],
+                            'path'=>$categoryImages[$imageId-1]['image_path'].$categoryImages[$imageId-1]['image'],
+                            'thumb_path'=>$categoryImages[$imageId-1]['thumb_path'].$image,
+                            'size'=>'0',
+                            'description'=>'',
+                            'media_type'=>'image'
+                        ));
+                        $mediaInsertId = $db2->insert_id();
+                    }
+                    else {
+                        $mediaInsertId = '1001';
+                    }
                     
                     //media file
                     

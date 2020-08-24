@@ -135,7 +135,7 @@ class Pti_model extends CI_Model {
 	    $this->db->join('ibc_categories ic','ic.id = inp.ibc_category','left');
 	    $this->db->join('ibc_cities ici','ici.id = inp.city_id','left');
 	    $this->db->join('ibc_states is','is.id = inp.state_id','left');
-	    $data['feeds'] = $this->db->get_where('ibc_news_pti inp',array('date(inp.published)'=>date('Y-m-d'),'inp.status'=>1))->result_array();
+	    $data['feeds'] = $this->db->get_where('ibc_news_pti inp',array('date(inp.published)'=>'2020-08-19','inp.status'=>1))->result_array();
 	    return $data['feeds'];
 	}
 	
@@ -182,7 +182,8 @@ class Pti_model extends CI_Model {
     	    $temp = array();
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
     	    $temp['news_name_english'] = $ptiRecord['title_eng'];
-    	    $temp['news_content'] = $ptiRecord['content'];
+    	    //$temp['news_content'] = $ptiRecord['content'];
+    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strpos($ptiRecord['content'], '<p> भाषा</p>')+20));
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
     	    $temp['slug'] = str_replace('-', ' ',$ptiRecord['slug_eng'].'-'.date('U'));
@@ -227,10 +228,29 @@ class Pti_model extends CI_Model {
     	    
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
-    	    $imageId = rand(1,10);
-    	    $image = $this->config->item('del_'.$imageId);
-    	    $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
-    	    $mediaInsertId = $db2->insert_id();
+    	    $categoryId = '4';  //DEL
+    	    $this->db->select('*');
+    	    $categoryImages = $this->db->get_where('ibc_news_pti_medias',array('pti_category'=>$categoryId,'status'=>1))->result_array();
+    	    
+    	    if(count($categoryImages)>0){
+    	        $imageId = rand(1,count($categoryImages));
+    	        
+    	        
+    	        $db2->insert('ibc_medias',array(
+    	            'title'=>$categoryImages[$imageId-1]['image'],
+    	            'name'=>$categoryImages[$imageId-1]['image'],
+    	            'path'=>$categoryImages[$imageId-1]['image_path'].$categoryImages[$imageId-1]['image'],
+    	            'thumb_path'=>$categoryImages[$imageId-1]['thumb_path'].$image,
+    	            'size'=>'0',
+    	            'description'=>'',
+    	            'media_type'=>'image'
+    	        ));
+    	        $mediaInsertId = $db2->insert_id();
+    	    }
+    	    else {
+    	        $mediaInsertId = '1001';
+    	    }
+    	    
     	    //media file
     	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
@@ -303,7 +323,8 @@ class Pti_model extends CI_Model {
     	    $temp = array();
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
     	    $temp['news_name_english'] = $ptiRecord['title_eng'];
-    	    $temp['news_content'] = $ptiRecord['content'];
+    	    //$temp['news_content'] = $ptiRecord['content'];
+    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strpos($ptiRecord['content'], '<p> भाषा</p>')+20));
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
     	    $temp['slug'] = str_replace('-', ' ',$ptiRecord['slug_eng'].'-'.date('U'));
@@ -346,20 +367,35 @@ class Pti_model extends CI_Model {
     	    /// ibc news media
     	    $db2->insert('ibc_news_types_mapping',array('news_id'=>$insertId,'news_type_id'=>'9','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
     	    
+    	    
     	    if($ptiRecord['ibc_category'] == '90'){
-    	        $imageId = rand(1,10);
-    	        $image = $this->config->item('br_'.$imageId);
-    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
+    	        $categoryId = '5';  //BR
     	    } else if($ptiRecord['ibc_category'] == '91'){
-    	        $imageId = rand(1,10);
-    	        $image = $this->config->item('up_'.$imageId);
-    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
-    	    }if($ptiRecord['ibc_category'] == '92'){
-    	        $imageId = rand(1,10);
-    	        $image = $this->config->item('mh_'.$imageId);
-    	        $db2->insert('ibc_medias',array('title'=>$image,'name'=>$image,'path'=>'storage/news/'.$image,'thumb_path'=>'storage/news/thumbs/'.$image,'size'=>'0','description'=>'','media_type'=>'image'));
+    	        $categoryId = '6';  //UP
+    	    } else if($ptiRecord['ibc_category'] == '92'){
+    	        $categoryId = '7';  //MH
     	    }
-    	    $mediaInsertId = $db2->insert_id();
+    	    
+    	    $this->db->select('*');
+    	    $categoryImages = $this->db->get_where('ibc_news_pti_medias',array('pti_category'=>$categoryId,'status'=>1))->result_array();
+    	    
+    	    if(count($categoryImages)>0){
+    	        $imageId = rand(1,count($categoryImages));
+    	        
+    	        $db2->insert('ibc_medias',array(
+    	            'title'=>$categoryImages[$imageId-1]['image'],
+    	            'name'=>$categoryImages[$imageId-1]['image'],
+    	            'path'=>$categoryImages[$imageId-1]['image_path'].$categoryImages[$imageId-1]['image'],
+    	            'thumb_path'=>$categoryImages[$imageId-1]['thumb_path'].$image,
+    	            'size'=>'0',
+    	            'description'=>'',
+    	            'media_type'=>'image'
+    	        ));
+    	        $mediaInsertId = $db2->insert_id();
+    	    }
+    	    else {
+    	        $mediaInsertId = '1001';
+    	    }
     	    
     	    //media file
     	    $db2->insert('ibc_news_medias',array('news_id'=>$insertId,'media_id'=>$mediaInsertId,'is_featured'=>'0','created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')));
