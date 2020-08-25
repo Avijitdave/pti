@@ -183,7 +183,7 @@ class Pti_model extends CI_Model {
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
     	    $temp['news_name_english'] = $ptiRecord['title_eng'];
     	    //$temp['news_content'] = $ptiRecord['content'];
-    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strpos($ptiRecord['content'], '<p> भाषा</p>')+20));
+    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strrpos($ptiRecord['content'], '<p>भाषा')));
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
     	    $temp['slug'] = str_replace('-', ' ',$ptiRecord['slug_eng'].'-'.date('U'));
@@ -324,7 +324,7 @@ class Pti_model extends CI_Model {
     	    $temp['news_name_hindi'] = $ptiRecord['title'];
     	    $temp['news_name_english'] = $ptiRecord['title_eng'];
     	    //$temp['news_content'] = $ptiRecord['content'];
-    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strpos($ptiRecord['content'], '<p> भाषा</p>')+20));
+    	    $temp['news_content'] = substr($ptiRecord['content'], 0,(strrpos($ptiRecord['content'], '<p>भाषा')));
     	    $temp['meta_title'] = $ptiRecord['title'].' '.str_replace('-', ' ', $ptiRecord['slug_eng']);
     	    $temp['cannonical_link'] = NULL;
     	    $temp['slug'] = str_replace('-', ' ',$ptiRecord['slug_eng'].'-'.date('U'));
